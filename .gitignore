@@ -1,0 +1,29 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.iml
+
+# Electron build artifacts
+out/
+build/
+
+# Resources (may contain large binaries)
+resources/*.exe
+resources/*.dmg
+resources/*.pkg
+resources/*.msi
+
+# OS specific
+.DS_Store
+desktop.ini
+
+# Environment
+.env
+.env.local

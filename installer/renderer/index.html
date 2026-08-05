@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HiAlex Installer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="../../resources/logo.png" alt="HiAlex Logo" class="logo" onerror="this.style.display='none'">
+      <h1>HiAlex Installer</h1>
+      <p class="subtitle">One-click setup for Paseo and Claude CLI</p>
+    </header>
+
+    <main>
+      <!-- Welcome Screen -->
+      <div id="screen-welcome" class="screen active">
+        <h2>Welcome to HiAlex</h2>
+        <p>This installer will set up:</p>
+        <ul>
+          <li><strong>Claude CLI</strong> - Command-line interface for Claude Code</li>
+          <li><strong>Paseo</strong> - Multi-agent orchestration platform</li>
+        </ul>
+        <p>Click "Next" to begin installation.</p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="app.goToScreen('installation')">Next</button>
+          <button class="btn btn-secondary" onclick="window.close()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Installation Screen -->
+      <div id="screen-installation" class="screen">
+        <h2>Installation</h2>
+        <div class="installation-options">
+          <label>
+            <input type="checkbox" id="install-claude" checked>
+            Install Claude CLI
+          </label>
+          <label>
+            <input type="checkbox" id="install-paseo" checked>
+            Install Paseo
+          </label>
+          <div class="directory-selector">
+            <label for="install-dir">Installation Directory:</label>
+            <div class="input-group">
+              <input type="text" id="install-dir" readonly>
+              <button class="btn btn-small" onclick="app.selectDirectory()">Browse</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-container" id="progress-container" style="display: none;">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <p class="progress-text" id="progress-text">Initializing...</p>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="btn-install" onclick="app.startInstallation()">Install</button>
+          <button class="btn btn-secondary" onclick="app.goToScreen('welcome')">Back</button>
+        </div>
+      </div>
+
+      <!-- Configuration Screen -->
+      <div id="screen-configuration" class="screen">
+        <h2>Configuration</h2>
+        <p>Configure your Claude CLI connection:</p>
+
+        <form id="config-form" onsubmit="app.saveConfiguration(event)">
+          <div class="form-group">
+            <label for="base-url">Base URL:</label>
+            <input type="url" id="base-url" placeholder="https://api.anthropic.com" required>
+            <small>The API endpoint for Claude Code</small>
+          </div>
+
+          <div class="form-group">
+            <label for="auth-token">Auth Token:</label>
+            <input type="password" id="auth-token" placeholder="Enter your authentication token" required>
+            <small>Your Anthropic API key or auth token</small>
+          </div>
+
+          <div class="form-group">
+            <button type="button" class="btn btn-small" onclick="app.testConfiguration()">Test Connection</button>
+            <span id="test-result" class="test-result"></span>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn btn-primary">Save & Continue</button>
+            <button type="button" class="btn btn-secondary" onclick="app.skipConfiguration()">Skip</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Complete Screen -->
+      <div id="screen-complete" class="screen">
+        <h2>Installation Complete!</h2>
+        <div class="success-icon">✓</div>
+        <p>HiAlex has been successfully installed.</p>
+
+        <div class="next-steps">
+          <h3>Next Steps:</h3>
+          <ol>
+            <li>Open a new terminal to use Claude CLI: <code>claude</code></li>
+            <li>Start Paseo daemon: <code>paseo</code></li>
+            <li>Access Paseo desktop app from your applications</li>
+          </ol>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" onclick="app.launchPaseo()">Launch Paseo</button>
+          <button class="btn btn-secondary" onclick="window.close()">Close</button>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>HiAlex v0.1.0 | Built on <a href="https://github.com/getpaseo/paseo" target="_blank">Paseo</a></p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
