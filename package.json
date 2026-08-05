@@ -56,12 +56,10 @@
         {
           "target": "nsis",
           "arch": [
-            "x64",
-            "ia32"
+            "x64"
           ]
         }
       ],
-      "icon": "resources/logo.svg",
       "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "mac": {
@@ -74,7 +72,6 @@
           ]
         }
       ],
-      "icon": "resources/logo.svg",
       "category": "public.app-category.developer-tools",
       "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
@@ -85,13 +82,10 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "HiAlex",
-      "installerIcon": "resources/logo.svg",
-      "uninstallerIcon": "resources/logo.svg",
       "license": "LICENSE"
     },
     "dmg": {
       "title": "HiAlex ${version}",
-      "icon": "resources/logo.svg",
       "contents": [
         {
           "x": 130,
