@@ -40,64 +40,25 @@
     },
     "files": [
       "installer/**/*",
-      "resources/**/*",
+      "resources/logo.svg",
       "!resources/*.exe",
       "!resources/*.dmg",
       "!resources/*.pkg"
     ],
-    "extraResources": [
-      {
-        "from": "resources/logo.svg",
-        "to": "logo.svg"
-      }
-    ],
     "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
+      "target": "nsis",
       "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "mac": {
-      "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
-      ],
+      "target": "dmg",
       "category": "public.app-category.developer-tools",
       "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "allowElevation": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "HiAlex",
-      "license": "LICENSE"
-    },
-    "dmg": {
-      "title": "HiAlex ${version}",
-      "contents": [
-        {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
+      "createStartMenuShortcut": true
     }
   }
 }
