@@ -69,7 +69,7 @@ class InstallationManager extends EventEmitter {
   }
 
   async install(options) {
-    const { installDir = this.installDir, claudeCLI = true, paseo = true } = options;
+    const { installDir = this.installDir } = options;
 
     this.emit('progress', { stage: 'init', message: 'Starting installation...', percent: 0 });
 
@@ -78,21 +78,24 @@ class InstallationManager extends EventEmitter {
       await fs.mkdir(installDir, { recursive: true });
       this.emit('progress', { stage: 'dir', message: 'Created installation directory', percent: 10 });
 
-      // Install Claude CLI
-      if (claudeCLI) {
-        await this.installClaudeCLI(installDir);
-        this.emit('progress', { stage: 'claude', message: 'Claude CLI installed', percent: 40 });
-      }
+      // Install Claude CLI first (required by Paseo)
+      this.emit('progress', { stage: 'claude', message: 'Installing Claude CLI...', percent: 20 });
+      await this.installClaudeCLI(installDir);
+      this.emit('progress', { stage: 'claude', message: 'Claude CLI installed', percent: 40 });
 
-      // Install Paseo
-      if (paseo) {
-        await this.installPaseo(installDir);
-        this.emit('progress', { stage: 'paseo', message: 'Paseo installed', percent: 70 });
-      }
+      // Install Paseo (with Claude CLI integration)
+      this.emit('progress', { stage: 'paseo', message: 'Installing Paseo...', percent: 50 });
+      await this.installPaseo(installDir);
+      this.emit('progress', { stage: 'paseo', message: 'Paseo installed', percent: 70 });
+
+      // Configure Paseo to use Claude CLI
+      this.emit('progress', { stage: 'config', message: 'Configuring Paseo with Claude...', percent: 80 });
+      await this.configurePaseoWithClaude(installDir);
+      this.emit('progress', { stage: 'config', message: 'Configuration complete', percent: 85 });
 
       // Setup environment
       await this.setupEnvironment(installDir);
-      this.emit('progress', { stage: 'env', message: 'Environment configured', percent: 90 });
+      this.emit('progress', { stage: 'env', message: 'Environment configured', percent: 95 });
 
       this.emit('progress', { stage: 'complete', message: 'Installation complete!', percent: 100 });
       return { success: true, installDir };
@@ -124,7 +127,6 @@ class InstallationManager extends EventEmitter {
   async installPaseo(installDir) {
     try {
       // Install Paseo CLI globally via npm
-      this.emit('progress', { stage: 'paseo', message: 'Installing Paseo CLI...', percent: 50 });
       await execAsync('npm install -g @getpaseo/cli');
 
       // Download and install Paseo desktop app if bundled
@@ -150,6 +152,61 @@ class InstallationManager extends EventEmitter {
     } catch (error) {
       throw new Error(`Failed to install Paseo: ${error.message}`);
     }
+  }
+
+  async configurePaseoWithClaude(installDir) {
+    try {
+      // Get Paseo config directory
+      const paseoConfigDir = this.getPaseoConfigDir();
+      await fs.mkdir(paseoConfigDir, { recursive: true });
+
+      // Read existing Paseo config if it exists
+      const paseoConfigPath = path.join(paseoConfigDir, 'config.json');
+      let paseoConfig = {};
+
+      try {
+        const existingConfig = await fs.readFile(paseoConfigPath, 'utf-8');
+        paseoConfig = JSON.parse(existingConfig);
+      } catch (error) {
+        // Config doesn't exist yet, will create new
+      }
+
+      // Add Claude CLI as a provider in Paseo
+      if (!paseoConfig.providers) {
+        paseoConfig.providers = {};
+      }
+
+      // Configure Claude CLI provider
+      paseoConfig.providers.claude = {
+        name: 'Claude Code',
+        type: 'claude-cli',
+        enabled: true,
+        command: 'claude',
+        installedBy: 'HiAlex',
+        installedAt: new Date().toISOString()
+      };
+
+      // Set Claude as default provider if not set
+      if (!paseoConfig.defaultProvider) {
+        paseoConfig.defaultProvider = 'claude';
+      }
+
+      // Write updated config
+      await fs.writeFile(paseoConfigPath, JSON.stringify(paseoConfig, null, 2));
+
+      return true;
+    } catch (error) {
+      console.error('Failed to configure Paseo with Claude:', error);
+      // Non-critical error, don't throw
+      return false;
+    }
+  }
+
+  getPaseoConfigDir() {
+    if (this.platform === 'win32') {
+      return path.join(process.env.APPDATA || os.homedir(), 'paseo');
+    }
+    return path.join(os.homedir(), '.paseo');
   }
 
   async runInstaller(installerPath, args = []) {

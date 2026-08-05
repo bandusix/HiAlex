@@ -11,19 +11,19 @@
 2. **Run** the installer
 
 3. **Follow** the wizard:
-   - Select components (Claude CLI, Paseo, or both)
-   - Choose installation directory
-   - Configure Claude CLI credentials
+   - Choose installation directory (optional)
+   - Configure Claude CLI API credentials
    - Complete installation
 
 4. **Start using**:
    ```bash
-   # Test Claude CLI
-   claude --version
-   
-   # Start Paseo
+   # Start Paseo (Claude CLI is integrated)
    paseo
+   
+   # Or launch Paseo desktop app
    ```
+   
+   Claude CLI is automatically configured as Paseo's default provider!
 
 ## For Developers
 

@@ -1,20 +1,22 @@
 # HiAlex
 
-An all-in-one GUI installer for Paseo and Claude CLI on Windows and macOS.
+An all-in-one GUI installer for Paseo with integrated Claude CLI on Windows and macOS.
 
 ## Features
 
-- 🚀 One-click installation of Paseo and Claude CLI
+- 🚀 One-click installation of Paseo with Claude CLI integration
 - 🎨 Beautiful GUI installation wizard
-- ⚙️ Interactive configuration for BASE URL and AUTH TOKEN
+- ⚙️ Interactive configuration for Claude CLI authentication
+- 🔗 Automatic integration - Claude CLI configured as Paseo's default provider
 - 💾 Offline installation support
 - 🖥️ Cross-platform: Windows and macOS
 
 ## What's Included
 
 - **Paseo**: Multi-agent orchestration platform for AI coding assistants
-- **Claude CLI**: Command-line interface for Claude Code
-- **Configuration Wizard**: GUI-based setup for authentication and endpoints
+- **Claude CLI**: Integrated as the default AI provider in Paseo
+- **Seamless Integration**: Claude CLI automatically configured and ready to use in Paseo
+- **Configuration Wizard**: GUI-based setup for authentication
 
 ## Installation
 

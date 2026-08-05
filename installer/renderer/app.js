@@ -54,14 +54,7 @@ const app = {
   },
 
   async startInstallation() {
-    const installClaudeCLI = document.getElementById('install-claude').checked;
-    const installPaseo = document.getElementById('install-paseo').checked;
     const installDir = this.installDir || document.getElementById('install-dir').value;
-
-    if (!installClaudeCLI && !installPaseo) {
-      alert('Please select at least one component to install.');
-      return;
-    }
 
     // Disable install button and show progress
     const installBtn = document.getElementById('btn-install');
@@ -73,8 +66,6 @@ const app = {
 
     try {
       const result = await window.hialex.startInstallation({
-        claudeCLI: installClaudeCLI,
-        paseo: installPaseo,
         installDir: installDir
       });
 
