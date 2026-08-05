@@ -108,19 +108,39 @@ class InstallationManager extends EventEmitter {
   async installClaudeCLI(installDir) {
     const resourcesDir = path.join(__dirname, '../resources');
 
-    if (this.platform === 'win32') {
-      // Use bundled Windows installer or download
-      const installerPath = path.join(resourcesDir, 'claude-cli-setup.exe');
-      await this.runInstaller(installerPath, ['/S', `/D=${installDir}`]);
-    } else if (this.platform === 'darwin') {
-      // Use npm to install globally or use bundled installer
-      try {
-        await execAsync('npm install -g @anthropic-ai/claude-cli');
-      } catch (error) {
-        // Fallback to bundled installer
-        const installerPath = path.join(resourcesDir, 'claude-cli.pkg');
-        await this.runInstaller(installerPath, []);
+    try {
+      if (this.platform === 'win32') {
+        // Try bundled installer first
+        const installerPath = path.join(resourcesDir, 'claude-cli-setup.exe');
+        try {
+          await fs.access(installerPath);
+          await this.runInstaller(installerPath, ['/S', `/D=${installDir}`]);
+        } catch (error) {
+          // Bundled installer not found, try npm
+          this.emit('progress', { stage: 'claude', message: 'Installing Claude CLI via npm...', percent: 30 });
+          try {
+            await execAsync('npm install -g @anthropic-ai/claude-cli');
+          } catch (npmError) {
+            throw new Error('Claude CLI installation failed. Please ensure npm is installed or add claude-cli-setup.exe to resources folder.');
+          }
+        }
+      } else if (this.platform === 'darwin') {
+        // Try npm first for macOS
+        try {
+          await execAsync('npm install -g @anthropic-ai/claude-cli');
+        } catch (error) {
+          // Fallback to bundled installer
+          const installerPath = path.join(resourcesDir, 'claude-cli.pkg');
+          try {
+            await fs.access(installerPath);
+            await this.runInstaller(installerPath, []);
+          } catch (pkgError) {
+            throw new Error('Claude CLI installation failed. Please ensure npm is installed or add claude-cli.pkg to resources folder.');
+          }
+        }
       }
+    } catch (error) {
+      throw error;
     }
   }
 

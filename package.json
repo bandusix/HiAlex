@@ -1,6 +1,6 @@
 {
   "name": "hialex",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "GUI installer for Paseo and Claude CLI",
   "main": "installer/main.js",
   "scripts": {
