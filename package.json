@@ -40,26 +40,70 @@
     },
     "files": [
       "installer/**/*",
-      "resources/**/*"
+      "resources/**/*",
+      "!resources/*.exe",
+      "!resources/*.dmg",
+      "!resources/*.pkg"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/logo.svg",
+        "to": "logo.svg"
+      }
     ],
     "win": {
       "target": [
-        "nsis"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
       ],
-      "icon": "resources/icon.ico"
+      "icon": "resources/logo.svg",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "mac": {
       "target": [
-        "dmg"
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ],
-      "icon": "resources/icon.icns",
-      "category": "public.app-category.developer-tools"
+      "icon": "resources/logo.svg",
+      "category": "public.app-category.developer-tools",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
+      "createStartMenuShortcut": true,
+      "shortcutName": "HiAlex",
+      "installerIcon": "resources/logo.svg",
+      "uninstallerIcon": "resources/logo.svg",
+      "license": "LICENSE"
+    },
+    "dmg": {
+      "title": "HiAlex ${version}",
+      "icon": "resources/logo.svg",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
     }
   }
 }

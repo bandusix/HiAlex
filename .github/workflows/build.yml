@@ -1,4 +1,4 @@
-name: Build HiAlex Installer
+name: Build and Release HiAlex
 
 on:
   push:
@@ -10,71 +10,140 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Windows installer
         run: npm run package:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: List dist directory
+        run: dir dist
+        shell: cmd
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
         with:
           name: hialex-windows
-          path: dist/*.exe
+          path: |
+            dist/*.exe
+            dist/*.exe.blockmap
+          retention-days: 7
+          if-no-files-found: error
 
   build-macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build macOS installer
         run: npm run package:mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: List dist directory
+        run: ls -la dist/
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
         with:
           name: hialex-macos
-          path: dist/*.dmg
+          path: |
+            dist/*.dmg
+            dist/*.dmg.blockmap
+          retention-days: 7
+          if-no-files-found: error
 
   release:
     needs: [build-windows, build-macos]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Download Windows artifact
-        uses: actions/download-artifact@v3
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
         with:
           name: hialex-windows
-          path: dist
+          path: dist-windows
 
-      - name: Download macOS artifact
-        uses: actions/download-artifact@v3
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
         with:
           name: hialex-macos
-          path: dist
+          path: dist-macos
+
+      - name: List all artifacts
+        run: |
+          echo "Windows artifacts:"
+          ls -la dist-windows/
+          echo "macOS artifacts:"
+          ls -la dist-macos/
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/*
+          files: |
+            dist-windows/*.exe
+            dist-macos/*.dmg
           draft: false
           prerelease: false
+          generate_release_notes: true
+          body: |
+            ## HiAlex v${{ steps.get_version.outputs.VERSION }}
+
+            ### 🎉 GUI Installer for Paseo and Claude CLI
+
+            **Download the installer for your platform:**
+
+            - 🪟 **Windows**: `HiAlex-Setup-${{ steps.get_version.outputs.VERSION }}.exe`
+            - 🍎 **macOS**: `HiAlex-${{ steps.get_version.outputs.VERSION }}.dmg`
+
+            ### ✨ Features
+            - One-click installation of Claude CLI and Paseo
+            - Interactive configuration wizard
+            - Beautiful GUI interface
+            - Automatic PATH configuration
+            - Offline installation support
+
+            ### 📦 What's Included
+            - Claude CLI installation
+            - Paseo installation (via npm)
+            - Configuration wizard for authentication
+
+            ### 📖 Documentation
+            - [Quick Start Guide](https://github.com/bandusix/HiAlex/blob/main/QUICKSTART.md)
+            - [User Guide](https://github.com/bandusix/HiAlex/blob/main/docs/USER_GUIDE.md)
+            - [Development Guide](https://github.com/bandusix/HiAlex/blob/main/docs/DEVELOPMENT.md)
+
+            ### 🙏 Acknowledgments
+            Built on top of [Paseo](https://github.com/getpaseo/paseo)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
