@@ -1,9 +1,50 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
+const os = require('os');
 const { InstallationManager } = require('./installation-manager');
-const Store = require('electron-store');
 
-const store = new Store();
+// Simple JSON-based config store (no external dependency)
+class SimpleStore {
+  constructor() {
+    this.configDir = path.join(os.homedir(), '.hialex');
+    this.configFile = path.join(this.configDir, 'config.json');
+    this.data = this.load();
+  }
+
+  load() {
+    try {
+      if (fs.existsSync(this.configFile)) {
+        return JSON.parse(fs.readFileSync(this.configFile, 'utf-8'));
+      }
+    } catch (error) {
+      console.error('Error loading config:', error);
+    }
+    return {};
+  }
+
+  save() {
+    try {
+      if (!fs.existsSync(this.configDir)) {
+        fs.mkdirSync(this.configDir, { recursive: true });
+      }
+      fs.writeFileSync(this.configFile, JSON.stringify(this.data, null, 2));
+    } catch (error) {
+      console.error('Error saving config:', error);
+    }
+  }
+
+  get(key, defaultValue) {
+    return this.data[key] !== undefined ? this.data[key] : defaultValue;
+  }
+
+  set(key, value) {
+    this.data[key] = value;
+    this.save();
+  }
+}
+
+const store = new SimpleStore();
 const installManager = new InstallationManager();
 
 let mainWindow;
