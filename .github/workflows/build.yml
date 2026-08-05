@@ -25,6 +25,7 @@ jobs:
         run: npm run package:win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
 
       - name: List dist directory
         run: dir dist
@@ -58,6 +59,7 @@ jobs:
         run: npm run package:mac
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
 
       - name: List dist directory
         run: ls -la dist/
