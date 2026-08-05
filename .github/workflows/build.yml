@@ -22,9 +22,8 @@ jobs:
         run: npm install
 
       - name: Build Windows installer
-        run: npm run package:win
+        run: npm run build:win
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
       - name: List dist directory
@@ -56,9 +55,8 @@ jobs:
         run: npm install
 
       - name: Build macOS installer
-        run: npm run package:mac
+        run: npm run build:mac
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
       - name: List dist directory
