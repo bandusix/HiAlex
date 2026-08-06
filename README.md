@@ -1,22 +1,32 @@
 # HiAlex
 
-An all-in-one GUI installer for Paseo with integrated Claude CLI on Windows and macOS.
+**Paseo + Claude CLI in one app** - No installation needed, just download and run!
 
 ## Features
 
-- 🚀 One-click installation of Paseo with Claude CLI integration
-- 🎨 Beautiful GUI installation wizard
-- ⚙️ Interactive configuration for Claude CLI authentication
-- 🔗 Automatic integration - Claude CLI configured as Paseo's default provider
-- 💾 Offline installation support
+- 🚀 **Portable Application** - Download, extract, and run immediately
+- 🎨 Beautiful integrated GUI for Paseo
+- 🤖 Claude CLI built-in and pre-configured
+- ⚙️ Simple API key configuration
+- 💾 No system installation required
 - 🖥️ Cross-platform: Windows and macOS
 
-## What's Included
+## Quick Start
 
-- **Paseo**: Multi-agent orchestration platform for AI coding assistants
-- **Claude CLI**: Integrated as the default AI provider in Paseo
-- **Seamless Integration**: Claude CLI automatically configured and ready to use in Paseo
-- **Configuration Wizard**: GUI-based setup for authentication
+1. **Download** HiAlex for your platform
+2. **Extract** the archive
+3. **Run** HiAlex.exe (Windows) or HiAlex.app (macOS)
+4. **Configure** your Anthropic API key
+5. **Start coding** with AI assistance!
+
+## What is HiAlex?
+
+HiAlex is a **standalone desktop application** that combines:
+- **Paseo** - Multi-agent AI orchestration
+- **Claude CLI** - Anthropic's coding assistant
+- **Integrated UI** - Seamless experience in one app
+
+No separate installations, no command-line setup, no npm required!
 
 ## Installation
 

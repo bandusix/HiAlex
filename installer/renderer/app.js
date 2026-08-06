@@ -123,7 +123,7 @@ const app = {
     }
   },
 
-  async saveConfiguration(event) {
+  async saveAndStart(event) {
     event.preventDefault();
 
     const baseUrl = document.getElementById('base-url').value;
@@ -142,13 +142,10 @@ const app = {
     }
   },
 
-  skipConfiguration() {
-    this.goToScreen('complete');
-  },
-
-  async launchPaseo() {
-    // This would launch Paseo desktop app
-    // For now, just close the installer
+  async openMainApp() {
+    // This will eventually launch the main HiAlex app
+    // For now, just close the setup wizard
+    alert('HiAlex will now launch!\n\nNote: Main application coming in next update.');
     window.close();
   }
 };

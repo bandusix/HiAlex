@@ -18,68 +18,45 @@
       <!-- Welcome Screen -->
       <div id="screen-welcome" class="screen active">
         <h2>Welcome to HiAlex</h2>
-        <p>This installer will set up <strong>Paseo</strong> with integrated <strong>Claude CLI</strong> support.</p>
-        <ul>
-          <li><strong>Paseo</strong> - Multi-agent orchestration platform</li>
-          <li><strong>Claude CLI</strong> - Integrated as default AI provider</li>
-          <li><strong>Seamless Integration</strong> - Claude CLI automatically configured in Paseo</li>
-        </ul>
-        <p>After installation, you'll have a complete AI coding environment ready to use.</p>
+        <p><strong>Paseo + Claude CLI</strong> in one standalone application.</p>
+        <p>HiAlex is ready to use - no installation needed!</p>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="margin-bottom: 12px; font-size: 18px;">✨ What you get:</h3>
+          <ul style="margin-left: 20px;">
+            <li>Multi-agent AI coding environment</li>
+            <li>Claude AI integration (built-in)</li>
+            <li>Portable - no system changes</li>
+            <li>Just configure your API key and start!</li>
+          </ul>
+        </div>
+
         <div class="actions">
-          <button class="btn btn-primary" onclick="app.goToScreen('installation')">Next</button>
-          <button class="btn btn-secondary" onclick="window.close()">Cancel</button>
+          <button class="btn btn-primary" onclick="app.goToScreen('configuration')">Configure & Start</button>
+          <button class="btn btn-secondary" onclick="window.close()">Exit</button>
         </div>
       </div>
 
-      <!-- Installation Screen -->
-      <div id="screen-installation" class="screen">
-        <h2>Installation</h2>
-        <div class="installation-options">
-          <p><strong>Installation includes:</strong></p>
-          <ul style="margin-left: 20px; margin-bottom: 20px;">
-            <li>✓ Paseo CLI and Desktop App</li>
-            <li>✓ Claude CLI (integrated provider)</li>
-            <li>✓ Automatic configuration</li>
-            <li>✓ System PATH setup</li>
-          </ul>
-          <div class="directory-selector">
-            <label for="install-dir">Installation Directory:</label>
-            <div class="input-group">
-              <input type="text" id="install-dir" readonly placeholder="Default system location">
-              <button class="btn btn-small" onclick="app.selectDirectory()">Browse</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="progress-container" id="progress-container" style="display: none;">
-          <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill"></div>
-          </div>
-          <p class="progress-text" id="progress-text">Initializing...</p>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-primary" id="btn-install" onclick="app.startInstallation()">Install</button>
-          <button class="btn btn-secondary" onclick="app.goToScreen('welcome')">Back</button>
-        </div>
+      <!-- Installation Screen - REMOVED, go directly to configuration -->
+      <div id="screen-installation" class="screen" style="display: none;">
       </div>
 
       <!-- Configuration Screen -->
       <div id="screen-configuration" class="screen">
-        <h2>Claude CLI Configuration</h2>
-        <p>Configure Claude CLI authentication (will be used by Paseo):</p>
+        <h2>Configure Your API Key</h2>
+        <p>Enter your Anthropic API credentials to start using Claude AI:</p>
 
-        <form id="config-form" onsubmit="app.saveConfiguration(event)">
+        <form id="config-form" onsubmit="app.saveAndStart(event)">
           <div class="form-group">
             <label for="base-url">API Base URL:</label>
             <input type="url" id="base-url" placeholder="https://api.anthropic.com" value="https://api.anthropic.com" required>
-            <small>The Anthropic API endpoint</small>
+            <small>Usually this is the default Anthropic endpoint</small>
           </div>
 
           <div class="form-group">
-            <label for="auth-token">API Key / Auth Token:</label>
+            <label for="auth-token">API Key:</label>
             <input type="password" id="auth-token" placeholder="sk-ant-..." required>
-            <small>Your Anthropic API key (get it from console.anthropic.com)</small>
+            <small>Get your API key from <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></small>
           </div>
 
           <div class="form-group">
@@ -88,30 +65,30 @@
           </div>
 
           <div class="actions">
-            <button type="submit" class="btn btn-primary">Save & Continue</button>
-            <button type="button" class="btn btn-secondary" onclick="app.skipConfiguration()">Skip for Now</button>
+            <button type="submit" class="btn btn-primary">Save & Start HiAlex</button>
+            <button type="button" class="btn btn-secondary" onclick="app.goToScreen('welcome')">Back</button>
           </div>
         </form>
       </div>
 
       <!-- Complete Screen -->
       <div id="screen-complete" class="screen">
-        <h2>Installation Complete!</h2>
+        <h2>All Set!</h2>
         <div class="success-icon">✓</div>
-        <p>Paseo with integrated Claude CLI has been successfully installed.</p>
+        <p>HiAlex is configured and ready to use.</p>
 
         <div class="next-steps">
-          <h3>Next Steps:</h3>
+          <h3>What's Next:</h3>
           <ol>
-            <li>Start Paseo: <code>paseo</code> or launch from applications</li>
-            <li>Claude CLI is already configured as the default provider</li>
-            <li>Create your first agent and start coding!</li>
+            <li>HiAlex will now open the main application</li>
+            <li>Create your first AI agent</li>
+            <li>Start coding with Claude AI assistance!</li>
           </ol>
-          <p style="margin-top: 16px;"><strong>Tip:</strong> Claude CLI works seamlessly within Paseo - no additional setup needed.</p>
+          <p style="margin-top: 16px;"><strong>Tip:</strong> You can change settings anytime from the app menu.</p>
         </div>
 
         <div class="actions">
-          <button class="btn btn-primary" onclick="app.launchPaseo()">Launch Paseo</button>
+          <button class="btn btn-primary" onclick="app.openMainApp()">Open HiAlex</button>
           <button class="btn btn-secondary" onclick="window.close()">Close</button>
         </div>
       </div>
