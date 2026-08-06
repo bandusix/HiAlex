@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HiAlex Setup</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>HiAlex Setup</h1>
+      <p class="subtitle">Configure your API key to get started</p>
+    </header>
+
+    <main>
+      <h2>Anthropic API Configuration</h2>
+      <p>Enter your Anthropic API credentials:</p>
+
+      <form id="setup-form" onsubmit="setupApp.saveAndStart(event)">
+        <div class="form-group">
+          <label for="base-url">API Base URL:</label>
+          <input type="url" id="base-url" value="https://api.anthropic.com" required>
+          <small>Usually this is the default endpoint</small>
+        </div>
+
+        <div class="form-group">
+          <label for="auth-token">API Key:</label>
+          <input type="password" id="auth-token" placeholder="sk-ant-..." required>
+          <small>Get your API key from <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></small>
+        </div>
+
+        <div class="form-group">
+          <button type="button" class="btn btn-secondary btn-small" onclick="setupApp.testConfiguration()">Test Connection</button>
+          <span id="test-result" class="test-result"></span>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Save & Start</button>
+        </div>
+      </form>
+    </main>
+
+    <footer>
+      <p>HiAlex - AI Coding Assistant</p>
+    </footer>
+  </div>
+
+  <script src="setup-app.js"></script>
+</body>
+</html>
