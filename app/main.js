@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const fetch = require('node-fetch');
 
 // Simple JSON-based config store
 class SimpleStore {
@@ -143,7 +144,6 @@ ipcMain.handle('get-configuration', async () => {
 
 ipcMain.handle('test-configuration', async (event, config) => {
   try {
-    const fetch = require('node-fetch');
     const response = await fetch(`${config.baseUrl}/v1/messages`, {
       method: 'POST',
       headers: {
@@ -187,7 +187,6 @@ ipcMain.handle('send-message', async (event, message) => {
       return { success: false, error: 'Not configured' };
     }
 
-    const fetch = require('node-fetch');
     const response = await fetch(`${config.baseUrl}/v1/messages`, {
       method: 'POST',
       headers: {

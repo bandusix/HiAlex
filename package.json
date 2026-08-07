@@ -1,6 +1,6 @@
 {
   "name": "hialex",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Standalone AI coding assistant with Claude integration",
   "main": "app/main.js",
   "scripts": {

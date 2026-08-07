@@ -240,6 +240,29 @@
   color: inherit;
 }
 
+/* Loading animation */
+.message-loading .message-content {
+  font-style: italic;
+  color: #6c757d;
+}
+
+.loading-dots::after {
+  content: '...';
+  animation: loadingDots 1.5s infinite;
+}
+
+@keyframes loadingDots {
+  0%, 20% {
+    content: '.';
+  }
+  40% {
+    content: '..';
+  }
+  60%, 100% {
+    content: '...';
+  }
+}
+
 /* Input Container */
 .input-container {
   padding: 20px;

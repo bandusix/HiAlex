@@ -36,14 +36,15 @@ const mainApp = {
     input.value = '';
     input.style.height = 'auto';
 
-    // Disable send button
-    const sendBtn = document.getElementById('btn-send');
-    sendBtn.disabled = true;
-    sendBtn.textContent = 'Sending...';
+    // Add loading indicator
+    const loadingId = this.addLoadingMessage();
 
     try {
       // Send to Claude API
       const result = await window.hialex.sendMessage(message);
+
+      // Remove loading indicator
+      this.removeLoadingMessage(loadingId);
 
       if (result.success) {
         this.addMessage('assistant', result.reply);
@@ -51,12 +52,41 @@ const mainApp = {
         this.addMessage('error', `Error: ${result.error}`);
       }
     } catch (error) {
+      this.removeLoadingMessage(loadingId);
       this.addMessage('error', `Error: ${error.message}`);
     } finally {
-      sendBtn.disabled = false;
-      sendBtn.textContent = 'Send';
       input.focus();
     }
+  },
+
+  addLoadingMessage() {
+    const messagesDiv = document.getElementById('messages');
+
+    // Remove welcome message if exists
+    const welcome = messagesDiv.querySelector('.welcome-message');
+    if (welcome) {
+      welcome.remove();
+    }
+
+    const loadingDiv = document.createElement('div');
+    const loadingId = 'loading-' + Date.now();
+    loadingDiv.id = loadingId;
+    loadingDiv.className = 'message message-assistant message-loading';
+    loadingDiv.innerHTML = `
+      <div class="message-avatar">🤖</div>
+      <div class="message-content">
+        <span class="loading-dots">Thinking</span>
+      </div>
+    `;
+    messagesDiv.appendChild(loadingDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    return loadingId;
+  },
+
+  removeLoadingMessage(id) {
+    const loading = document.getElementById(id);
+    if (loading) loading.remove();
   },
 
   addMessage(role, content) {
